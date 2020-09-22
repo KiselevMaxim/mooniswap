@@ -1,19 +1,22 @@
 const { expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
+const { contract } = require('./twrapper');
 
-const Mooniswap = artifacts.require('Mooniswap');
-const MooniFactory = artifacts.require('MooniFactory');
-const TokenWithBytes32SymbolMock = artifacts.require('TokenWithBytes32SymbolMock');
-const TokenWithStringSymbolMock = artifacts.require('TokenWithStringSymbolMock');
-const TokenWithBytes32CAPSSymbolMock = artifacts.require('TokenWithBytes32CAPSSymbolMock');
-const TokenWithStringCAPSSymbolMock = artifacts.require('TokenWithStringCAPSSymbolMock');
-const TokenWithNoSymbolMock = artifacts.require('TokenWithNoSymbolMock');
+const Mooniswap = contract.fromArtifact('Mooniswap');
+const MooniFactory = contract.fromArtifact('MooniFactory');
+const TokenWithBytes32SymbolMock = contract.fromArtifact('TokenWithBytes32SymbolMock');
+const TokenWithStringSymbolMock = contract.fromArtifact('TokenWithStringSymbolMock');
+const TokenWithBytes32CAPSSymbolMock = contract.fromArtifact('TokenWithBytes32CAPSSymbolMock');
+const TokenWithStringCAPSSymbolMock = contract.fromArtifact('TokenWithStringCAPSSymbolMock');
+const TokenWithNoSymbolMock = contract.fromArtifact('TokenWithNoSymbolMock');
 
-contract('MooniFactory', function ([_, wallet1, wallet2]) {
+//contract('MooniFactory', function ([_, wallet1, wallet2]) {
+describe('MooniFactory', function () {
+    const [_, wallet1, wallet2] = accounts;
     beforeEach(async function () {
         this.factory = await MooniFactory.new();
     });
-
+    // temporary skip
     describe('Symbol', async function () {
         it('should handle bytes32 symbol', async function () {
             const token1 = await TokenWithBytes32SymbolMock.new(web3.utils.toHex('ABC'));
@@ -105,7 +108,7 @@ contract('MooniFactory', function ([_, wallet1, wallet2]) {
             }
         });
     });
-
+    // temporary skip
     describe('Creation', async function () {
         it('should do not work for same token', async function () {
             const token1 = await TokenWithStringSymbolMock.new('ABC');

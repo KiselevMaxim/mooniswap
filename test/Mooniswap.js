@@ -1,5 +1,6 @@
 const { constants, time, ether, expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
+const { contract } = require('./twrapper');
 
 const money = {
     ether,
@@ -54,17 +55,19 @@ async function checkBalances (mooniswap, token, expectedBalance, expectedAdditio
     expect(removalBalance).to.be.bignumber.equal(expectedRemovalBalance);
 }
 
-const Factory = artifacts.require('FactoryMock');
-const Mooniswap = artifacts.require('MooniswapMock');
-const Token = artifacts.require('TokenMock');
+const Factory = contract.fromArtifact('FactoryMock');
+const Mooniswap = contract.fromArtifact('MooniswapMock');
+const Token = contract.fromArtifact('TokenMock');
 
-contract('Mooniswap', function ([_, wallet1, wallet2]) {
+describe('Mooniswap', function () {
+    const [_, wallet1, wallet2] = accounts;
     beforeEach(async function () {
         this.DAI = await Token.new('DAI', 'DAI', 18);
         this.WETH = await Token.new('WETH', 'WETH', 18);
         this.USDC = await Token.new('USDC', 'USDC', 6);
     });
 
+    // temporary skip
     describe('Creation', async function () {
         it('should be denied with empty name', async function () {
             await expectRevert(
@@ -113,7 +116,7 @@ contract('Mooniswap', function ([_, wallet1, wallet2]) {
             await Mooniswap.new([this.WETH.address, this.DAI.address], 'Mooniswap', 'MOON');
         });
     });
-
+    // temporary skip
     describe('Raw ETH support', async function () {
         beforeEach(async function () {
             this.mooniswap = await Mooniswap.new([constants.ZERO_ADDRESS, this.DAI.address], 'Mooniswap', 'MOON');
@@ -159,7 +162,7 @@ contract('Mooniswap', function ([_, wallet1, wallet2]) {
             expect(received).to.be.bignumber.equal(money.eth('0.5'));
         });
     });
-
+    // temporary skip
     describe('Actions', async function () {
         beforeEach(async function () {
             this.mooniswap = await Mooniswap.new([this.WETH.address, this.DAI.address], 'Mooniswap', 'MOON');
