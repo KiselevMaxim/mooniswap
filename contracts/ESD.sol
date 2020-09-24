@@ -6,8 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IEmiVault.sol";
-import "./uniswapv2/interfaces/IUniswapV2Factory.sol";
-import "./uniswapv2/interfaces/IUniswapV2Pair.sol";
+import "./interfaces/IMooniswap.sol";
 import "./interfaces/IESD.sol";
 
 contract ESD is IESD {
@@ -101,10 +100,10 @@ contract ESD is IESD {
     uint256 reserveIn,
     uint256 reserveOut
   ) internal pure returns (uint256 amountOut) {
-    require(amountIn > 0, "UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT");
+    require(amountIn > 0, "Emiswap: INSUFFICIENT_INPUT_AMOUNT");
     require(
       reserveIn > 0 && reserveOut > 0,
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY"
+      "Emiswap: INSUFFICIENT_LIQUIDITY"
     );
     amountOut = amountIn.mul(reserveOut).div(reserveIn);
   }
@@ -117,19 +116,22 @@ contract ESD is IESD {
     view
     returns (uint256)
   {
-    address pairContract = IUniswapV2Factory(_swapFactory).getPair(
-      _basicToken,
-      token
-    );
-    require(pairContract != address(0), "Pair not found");
-    (uint112 reserve0, uint112 reserve1, ) = IUniswapV2Pair(pairContract)
-      .getReserves();
+
+    // get pair pool
+    IERC20 _basicTokenERC20 = IERC20(_basicToken);
+    IERC20 tokenERC20 = IERC20(token);
+    IMooniswap pairContract = IMooniswapRegistry(_swapFactory).pools(_basicTokenERC20, tokenERC20);
+        
+    require(pairContract != IMooniswap(0), "Emiswap: Pair not found");
+    
     uint256 coinAmount = 0;
-    if (IUniswapV2Pair(pairContract).token0() == token) {
-      coinAmount = _getAmountOut(amount, reserve0, reserve1);
-    } else {
-      coinAmount = _getAmountOut(amount, reserve1, reserve0);
-    }
+
+    // get pool reserves
+    uint256 reserve0 = pairContract.getBalanceForAddition(_basicTokenERC20);    
+    uint256 reserve1 = pairContract.getBalanceForRemoval(tokenERC20);
+
+    coinAmount = _getAmountOut(amount, reserve0, reserve1);
+    
     return coinAmount;
   }
 

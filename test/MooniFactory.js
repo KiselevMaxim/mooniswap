@@ -10,7 +10,6 @@ const TokenWithBytes32CAPSSymbolMock = contract.fromArtifact('TokenWithBytes32CA
 const TokenWithStringCAPSSymbolMock = contract.fromArtifact('TokenWithStringCAPSSymbolMock');
 const TokenWithNoSymbolMock = contract.fromArtifact('TokenWithNoSymbolMock');
 
-//contract('MooniFactory', function ([_, wallet1, wallet2]) {
 describe('MooniFactory', function () {
     const [_, wallet1, wallet2] = accounts;
     beforeEach(async function () {

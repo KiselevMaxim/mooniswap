@@ -6,8 +6,6 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IESD.sol";
-import "./uniswapv2/interfaces/IUniswapV2Factory.sol";
-import "./uniswapv2/interfaces/IUniswapV2Pair.sol";
 
 contract EmiVault {
   using SafeMath for uint256;
@@ -37,10 +35,10 @@ contract EmiVault {
     uint256 reserveIn,
     uint256 reserveOut
   ) internal pure returns (uint256 amountOut) {
-    require(amountIn > 0, "UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT");
+    require(amountIn > 0, "EmiswapV2Library: INSUFFICIENT_INPUT_AMOUNT");
     require(
       reserveIn > 0 && reserveOut > 0,
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY"
+      "EmiswapV2Library: INSUFFICIENT_LIQUIDITY"
     );
     uint256 amountInWithFee = amountIn.mul(997);
     uint256 numerator = amountInWithFee.mul(reserveOut);
@@ -48,7 +46,8 @@ contract EmiVault {
     amountOut = numerator / denominator;
   }
 
-  function exchange(
+  /* Temporary removed */
+  /* function exchange(
     address factory,
     address tokenFrom,
     address tokenTo
@@ -84,7 +83,7 @@ contract EmiVault {
       // TODO: fix arguments (requires 4 arguments)
       // IUniswapV2Pair(pairContract).swap(coinAmount, 0);
     }
-  }
+  } */
 
   function setTrustedFactory(address factory, uint8 status)
     public

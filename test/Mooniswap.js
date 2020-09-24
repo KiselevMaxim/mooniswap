@@ -59,7 +59,8 @@ const Factory = contract.fromArtifact('FactoryMock');
 const Mooniswap = contract.fromArtifact('MooniswapMock');
 const Token = contract.fromArtifact('TokenMock');
 
-describe('Mooniswap', function () {
+// temporary skip
+describe.skip('Mooniswap', function () {
     const [_, wallet1, wallet2] = accounts;
     beforeEach(async function () {
         this.DAI = await Token.new('DAI', 'DAI', 18);

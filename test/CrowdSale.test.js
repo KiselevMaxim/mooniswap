@@ -38,7 +38,6 @@ let esd;
 let vault;
 let crowdSale;
 
-
 describe('CrowdSale Test', function () {
   const [factoryOwner, alice, bob, clarc, dave, eve] = accounts;
 
